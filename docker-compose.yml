@@ -1,0 +1,12 @@
+version: "3.5"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: db_job-portal
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: db_job-portal
+    ports:
+      - "127.0.0.1:5432:5432"
+    restart: unless-stopped
