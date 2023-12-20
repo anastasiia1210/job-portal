@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCvDto } from './dto/create-cv.dto';
-import { UpdateCvDto } from './dto/update-cv.dto';
+import { CreateCVDto } from './dto/create-cv.dto';
+import { UpdateCVDto } from './dto/update-cv.dto';
 
 @Injectable()
-export class CvService {
-  create(createCvDto: CreateCvDto) {
+export class CVService {
+  create(createCVDto: CreateCVDto) {
     return 'This action adds a new cv';
   }
 
@@ -16,7 +16,7 @@ export class CvService {
     return `This action returns a #${id} cv`;
   }
 
-  update(id: number, updateCvDto: UpdateCvDto) {
+  update(id: number, updateCVDto: UpdateCVDto) {
     return `This action updates a #${id} cv`;
   }
 

@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Company } from '../company/company.entity';
 
 @Entity({ name: 'employer' })
 export class Employer extends BaseEntity {
@@ -25,4 +32,9 @@ export class Employer extends BaseEntity {
 
   @Column({ type: 'boolean', nullable: true })
   approved: boolean;
+
+  @ManyToOne(() => Company, (company) => company.employers, {
+    onDelete: 'CASCADE',
+  })
+  company: Company;
 }

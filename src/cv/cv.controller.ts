@@ -1,14 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CvService } from './cv.service';
-import { CreateCvDto } from './dto/create-cv.dto';
-import { UpdateCvDto } from './dto/update-cv.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { CVService } from './cv.service';
+import { CreateCVDto } from './dto/create-cv.dto';
+import { UpdateCVDto } from './dto/update-cv.dto';
 
 @Controller('cv')
-export class CvController {
-  constructor(private readonly cvService: CvService) {}
+export class CVController {
+  constructor(private readonly cvService: CVService) {}
 
   @Post()
-  create(@Body() createCvDto: CreateCvDto) {
+  create(@Body() createCvDto: CreateCVDto) {
     return this.cvService.create(createCvDto);
   }
 
@@ -23,8 +31,8 @@ export class CvController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCvDto: UpdateCvDto) {
-    return this.cvService.update(+id, updateCvDto);
+  update(@Param('id') id: string, @Body() updateCVDto: UpdateCVDto) {
+    return this.cvService.update(+id, updateCVDto);
   }
 
   @Delete(':id')

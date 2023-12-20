@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Employer } from '../employer/employer.entity';
+import { JobOffer } from '../job-offer/job-offer.entity';
 
 @Entity({ name: 'company' })
 export class Company extends BaseEntity {
@@ -25,4 +33,14 @@ export class Company extends BaseEntity {
 
   @Column({ type: 'text' })
   description: string;
+
+  @OneToMany(() => Employer, (employer) => employer.company, {
+    onDelete: 'CASCADE',
+  })
+  employers: Employer[];
+
+  @OneToMany(() => JobOffer, (jobOffer) => jobOffer.company, {
+    onDelete: 'CASCADE',
+  })
+  jobOffers: JobOffer[];
 }

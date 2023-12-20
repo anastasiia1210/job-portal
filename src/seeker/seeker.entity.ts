@@ -1,4 +1,13 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { CV } from '../cv/cv.entity';
+import { JobRequest } from '../job-request/job-request.entity';
+import { NotificationJob } from '../notification/notification.entity';
 
 @Entity({ name: 'seeker' })
 export class Seeker extends BaseEntity {
@@ -40,4 +49,22 @@ export class Seeker extends BaseEntity {
 
   @Column({ type: 'boolean', nullable: true })
   militaryWork: boolean;
+
+  @OneToMany(() => CV, (cv) => cv.seeker, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  cvs: CV[];
+
+  @OneToMany(() => JobRequest, (jobRequest) => jobRequest.seeker, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  jobRequests: JobRequest[];
+
+  @OneToMany(() => NotificationJob, (notification) => notification.seeker, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  notificationsJob: NotificationJob[];
 }

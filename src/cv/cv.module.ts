@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { CvService } from './cv.service';
-import { CvController } from './cv.controller';
+import { CVService } from './cv.service';
+import { CVController } from './cv.controller';
 
 @Module({
-  controllers: [CvController],
-  providers: [CvService],
+  controllers: [CVController],
+  providers: [CVService],
 })
-export class CvModule {}
+export class CVModule {}

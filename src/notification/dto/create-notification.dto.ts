@@ -1,1 +1,1 @@
-export class CreateNotificationDto {}
+export class CreateNotificationJobDto {}

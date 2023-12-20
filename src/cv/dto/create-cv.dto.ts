@@ -1,1 +1,1 @@
-export class CreateCvDto {}
+export class CreateCVDto {}
