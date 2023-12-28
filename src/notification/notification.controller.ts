@@ -10,6 +10,7 @@ import {
 import { NotificationJobService } from './notification.service';
 import { CreateNotificationJobDto } from './dto/create-notification.dto';
 import { UpdateNotificationJobDto } from './dto/update-notification.dto';
+import { NotificationJob } from "./notification.entity";
 
 @Controller('notification')
 export class NotificationJobController {
@@ -18,30 +19,30 @@ export class NotificationJobController {
   ) {}
 
   @Post()
-  create(@Body() createNotificationJobDto: CreateNotificationJobDto) {
-    return this.notificationJobService.create(createNotificationJobDto);
+  async create(@Body() createNotificationJobDto: CreateNotificationJobDto): Promise<NotificationJob> {
+    return await this.notificationJobService.create(createNotificationJobDto);
   }
 
   @Get()
-  findAll() {
-    return this.notificationJobService.findAll();
+  async findAll(): Promise<NotificationJob[]> {
+    return await this.notificationJobService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.notificationJobService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<NotificationJob | undefined> {
+    return await this.notificationJobService.findOne(id);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateNotificationJobDto: UpdateNotificationJobDto,
-  ) {
-    return this.notificationJobService.update(+id, updateNotificationJobDto);
+  ): Promise<NotificationJob> {
+    return await this.notificationJobService.update(id, updateNotificationJobDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.notificationJobService.remove(+id);
+  async remove(@Param('id') id: string): Promise<NotificationJob> {
+    return await this.notificationJobService.remove(id);
   }
 }

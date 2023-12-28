@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateJobCategoryDto } from './dto/create-job-category.dto';
 import { UpdateJobCategoryDto } from './dto/update-job-category.dto';
+import { JobCategory } from './job-category.entity';
 
 @Injectable()
 export class JobCategoryService {
-  create(createJobCategoryDto: CreateJobCategoryDto) {
-    return 'This action adds a new jobCategory';
+  async create(
+    createJobCategoryDto: CreateJobCategoryDto,
+  ): Promise<JobCategory> {
+    const category = JobCategory.create(createJobCategoryDto);
+    return await category.save();
   }
 
-  findAll() {
-    return `This action returns all jobCategory`;
+  async findAll(): Promise<JobCategory[]> {
+    const categories: JobCategory[] = await JobCategory.find();
+    return categories;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} jobCategory`;
+  async findOne(id: string): Promise<JobCategory | undefined> {
+    return await JobCategory.findOne(id, { relations: ['jobOffers', 'cvs'] });
   }
 
-  update(id: number, updateJobCategoryDto: UpdateJobCategoryDto) {
-    return `This action updates a #${id} jobCategory`;
+  async update(
+    id: string,
+    updateJobCategoryDto: UpdateJobCategoryDto,
+  ): Promise<JobCategory> {
+    const category = await JobCategory.findOne(id);
+
+    if (!category) {
+      throw new HttpException(
+        'Category with id ${id} not found',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    Object.assign(category, updateJobCategoryDto);
+    return await JobCategory.save(category);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} jobCategory`;
+  async remove(id: string): Promise<JobCategory> {
+    try {
+      const category: JobCategory | undefined = await JobCategory.findOne(id);
+
+      if (!category) {
+        throw new HttpException(
+          'Category with id ${id} not found',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      await category.remove();
+      return category;
+    } catch (error) {
+      throw new HttpException('Error delete category', HttpStatus.BAD_REQUEST);
+    }
   }
 }

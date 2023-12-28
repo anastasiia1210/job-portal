@@ -1,34 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from "@nestjs/common";
 import { JobRequestService } from './job-request.service';
 import { CreateJobRequestDto } from './dto/create-job-request.dto';
 import { UpdateJobRequestDto } from './dto/update-job-request.dto';
+import { JobRequest } from "./job-request.entity";
+import { Company } from "../company/company.entity";
+import { JobCategory } from "../job-category/job-category.entity";
+import { JobOffer } from "../job-offer/job-offer.entity";
 
 @Controller('job-request')
 export class JobRequestController {
   constructor(private readonly jobRequestService: JobRequestService) {}
 
   @Post()
-  create(@Body() createJobRequestDto: CreateJobRequestDto) {
-    return this.jobRequestService.create(createJobRequestDto);
+  async create(@Body() createJobRequestDto: CreateJobRequestDto): Promise<JobRequest> {
+    return await this.jobRequestService.create(createJobRequestDto);
   }
 
   @Get()
-  findAll() {
-    return this.jobRequestService.findAll();
+  async findAll(): Promise<JobRequest[]> {
+    return await this.jobRequestService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.jobRequestService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<JobRequest | undefined> {
+    return await this.jobRequestService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateJobRequestDto: UpdateJobRequestDto) {
-    return this.jobRequestService.update(+id, updateJobRequestDto);
+  async update(@Param('id') id: string, @Body() updateJobRequestDto: UpdateJobRequestDto): Promise<JobRequest> {
+    return await this.jobRequestService.update(id, updateJobRequestDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.jobRequestService.remove(+id);
+  async remove(@Param('id') id: string): Promise<JobRequest> {
+    return await this.jobRequestService.remove(id);
   }
 }

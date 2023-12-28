@@ -2,33 +2,34 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { JobCategoryService } from './job-category.service';
 import { CreateJobCategoryDto } from './dto/create-job-category.dto';
 import { UpdateJobCategoryDto } from './dto/update-job-category.dto';
+import { JobCategory } from "./job-category.entity";
 
 @Controller('job-category')
 export class JobCategoryController {
   constructor(private readonly jobCategoryService: JobCategoryService) {}
 
   @Post()
-  create(@Body() createJobCategoryDto: CreateJobCategoryDto) {
-    return this.jobCategoryService.create(createJobCategoryDto);
+  async create(@Body() createJobCategoryDto: CreateJobCategoryDto): Promise<JobCategory> {
+    return await this.jobCategoryService.create(createJobCategoryDto);
   }
 
   @Get()
-  findAll() {
-    return this.jobCategoryService.findAll();
+  async findAll(): Promise<JobCategory[]>{
+    return await this.jobCategoryService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.jobCategoryService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<JobCategory | undefined> {
+    return await this.jobCategoryService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateJobCategoryDto: UpdateJobCategoryDto) {
-    return this.jobCategoryService.update(+id, updateJobCategoryDto);
+  async update(@Param('id') id: string, @Body() updateJobCategoryDto: UpdateJobCategoryDto): Promise<JobCategory> {
+    return await this.jobCategoryService.update(id, updateJobCategoryDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.jobCategoryService.remove(+id);
+  async remove(@Param('id') id: string): Promise<JobCategory> {
+    return await this.jobCategoryService.remove(id);
   }
 }

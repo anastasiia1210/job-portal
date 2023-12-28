@@ -11,6 +11,7 @@ import { JobCategoryModule } from './job-category/job-category.module';
 import { JobRequestModule } from './job-request/job-request.module';
 import { NotificationModule } from './notification/notification.module';
 import { CVModule } from './cv/cv.module';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { CVModule } from './cv/cv.module';
     JobRequestModule,
     NotificationModule,
   ],
-  controllers: [],
+  controllers: [AuthController],
   providers: [],
 })
 export class AppModule {}

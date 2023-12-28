@@ -1,26 +1,74 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCVDto } from './dto/create-cv.dto';
 import { UpdateCVDto } from './dto/update-cv.dto';
+import { CV } from './cv.entity';
+import { Seeker } from '../seeker/seeker.entity';
+import { JobCategory } from '../job-category/job-category.entity';
 
 @Injectable()
 export class CVService {
-  create(createCVDto: CreateCVDto) {
-    return 'This action adds a new cv';
+  async create(createCVDto: CreateCVDto): Promise<CV> {
+    try {
+      const seeker = await Seeker.findOneOrFail(createCVDto.seekerId);
+      const category = await JobCategory.findOneOrFail(createCVDto.categoryId);
+
+      const cv = CV.create(createCVDto);
+      cv.seeker = seeker;
+      cv.category = category;
+      return await cv.save();
+    } catch (error) {
+      throw new HttpException(
+        `Seeker or category not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
-  findAll() {
-    return `This action returns all cv`;
+  async findAll(): Promise<CV[]> {
+    const cvs: CV[] = await CV.find();
+    return cvs;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cv`;
+  async findOne(id: string): Promise<CV | undefined> {
+    return await CV.findOne(id);
   }
 
-  update(id: number, updateCVDto: UpdateCVDto) {
-    return `This action updates a #${id} cv`;
+  async update(id: string, updateCVDto: UpdateCVDto): Promise<CV> {
+    const cv = await CV.findOne(id);
+    if (!cv) {
+      throw new HttpException(
+        'CV with id ${id} not found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    try {
+      Object.assign(cv, updateCVDto);
+      if (updateCVDto.seekerId) {
+        const seeker = await Seeker.findOneOrFail(updateCVDto.seekerId);
+        cv.seeker = seeker;
+      }
+      if (updateCVDto.categoryId) {
+        const category = await JobCategory.findOneOrFail(
+          updateCVDto.categoryId,
+        );
+        cv.category = category;
+      }
+      return await CV.save(cv);
+    } catch (error) {
+      throw new HttpException(
+        'Seeker or category not found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cv`;
+  async remove(id: string): Promise<CV> {
+    try {
+      const cv: CV | undefined = await CV.findOne(id);
+      await cv.remove();
+      return cv;
+    } catch (error) {
+      throw new HttpException('CV not found', HttpStatus.NOT_FOUND);
+    }
   }
 }

@@ -9,7 +9,7 @@ import {
 import { Seeker } from '../seeker/seeker.entity';
 import { JobOffer } from '../job-offer/job-offer.entity';
 import { CV } from '../cv/cv.entity';
-import { NotificationJob } from "../notification/notification.entity";
+import { NotificationJob } from '../notification/notification.entity';
 
 @Entity({ name: 'job-request' })
 export class JobRequest extends BaseEntity {

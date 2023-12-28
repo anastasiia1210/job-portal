@@ -11,3 +11,4 @@ export class Admin extends BaseEntity {
   @Column({ type: 'varchar', length: 100 })
   password: string;
 }
+//admin@gmail.com admin

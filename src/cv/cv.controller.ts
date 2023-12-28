@@ -10,33 +10,37 @@ import {
 import { CVService } from './cv.service';
 import { CreateCVDto } from './dto/create-cv.dto';
 import { UpdateCVDto } from './dto/update-cv.dto';
+import { CV } from './cv.entity';
 
 @Controller('cv')
 export class CVController {
   constructor(private readonly cvService: CVService) {}
 
   @Post()
-  create(@Body() createCvDto: CreateCVDto) {
-    return this.cvService.create(createCvDto);
+  async create(@Body() createCvDto: CreateCVDto): Promise<CV> {
+    return await this.cvService.create(createCvDto);
   }
 
   @Get()
-  findAll() {
-    return this.cvService.findAll();
+  async findAll(): Promise<CV[]> {
+    return await this.cvService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cvService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<CV | undefined> {
+    return await this.cvService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCVDto: UpdateCVDto) {
-    return this.cvService.update(+id, updateCVDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateCVDto: UpdateCVDto,
+  ): Promise<CV> {
+    return await this.cvService.update(id, updateCVDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cvService.remove(+id);
+  async remove(@Param('id') id: string): Promise<CV> {
+    return await this.cvService.remove(id);
   }
 }

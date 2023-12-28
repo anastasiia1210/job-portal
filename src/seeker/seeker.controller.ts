@@ -1,34 +1,53 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { SeekerService } from './seeker.service';
 import { CreateSeekerDto } from './dto/create-seeker.dto';
 import { UpdateSeekerDto } from './dto/update-seeker.dto';
+import { Seeker } from './seeker.entity';
 
 @Controller('seeker')
 export class SeekerController {
   constructor(private readonly seekerService: SeekerService) {}
 
   @Post()
-  create(@Body() createSeekerDto: CreateSeekerDto) {
-    return this.seekerService.create(createSeekerDto);
+  async create(@Body() createSeekerDto: CreateSeekerDto): Promise<Seeker> {
+    return await this.seekerService.create(createSeekerDto);
   }
 
   @Get()
-  findAll() {
-    return this.seekerService.findAll();
+  async findAll() {
+    return await this.seekerService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.seekerService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<Seeker | undefined> {
+    return await this.seekerService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSeekerDto: UpdateSeekerDto) {
-    return this.seekerService.update(+id, updateSeekerDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateSeekerDto: UpdateSeekerDto,
+  ): Promise<Seeker> {
+    return await this.seekerService.update(id, updateSeekerDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.seekerService.remove(+id);
+  async remove(@Param('id') id: string): Promise<Seeker> {
+    return await this.seekerService.remove(id);
+  }
+
+  @Get('email/:email')
+  async findByEmail(
+    @Param('email') email: string,
+  ): Promise<Seeker | undefined> {
+    return await this.seekerService.findByEmail(email);
   }
 }
