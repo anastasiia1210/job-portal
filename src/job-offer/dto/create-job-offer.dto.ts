@@ -1,10 +1,10 @@
 import {
-  IsBoolean,
+  IsBoolean, IsDate,
   IsInt,
-  IsNotEmpty,
+  IsNotEmpty, IsOptional,
   IsString,
-  IsUUID,
-} from 'class-validator';
+  IsUUID
+} from "class-validator";
 
 export class CreateJobOfferDto {
   @IsNotEmpty()
@@ -37,6 +37,10 @@ export class CreateJobOfferDto {
 
   @IsBoolean()
   militaryWork?: boolean;
+
+  @IsOptional()
+  @IsDate()
+  postingDate?: Date;
 
   @IsNotEmpty()
   @IsUUID()

@@ -11,6 +11,7 @@ import { NotificationJobService } from './notification.service';
 import { CreateNotificationJobDto } from './dto/create-notification.dto';
 import { UpdateNotificationJobDto } from './dto/update-notification.dto';
 import { NotificationJob } from "./notification.entity";
+import { JobRequest } from "../job-request/job-request.entity";
 
 @Controller('notification')
 export class NotificationJobController {
@@ -44,5 +45,10 @@ export class NotificationJobController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<NotificationJob> {
     return await this.notificationJobService.remove(id);
+  }
+
+  @Get('seeker/:id')
+  async findAllofOneSeeker(@Param('id') id: string): Promise<NotificationJob[]> {
+    return await this.notificationJobService.findAllofOneSeeker(id);
   }
 }

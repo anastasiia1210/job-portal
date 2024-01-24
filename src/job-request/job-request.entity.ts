@@ -1,11 +1,11 @@
 import {
-  BaseEntity,
+  BaseEntity, BeforeInsert,
   Column,
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+  PrimaryGeneratedColumn
+} from "typeorm";
 import { Seeker } from '../seeker/seeker.entity';
 import { JobOffer } from '../job-offer/job-offer.entity';
 import { CV } from '../cv/cv.entity';
@@ -21,6 +21,9 @@ export class JobRequest extends BaseEntity {
 
   @Column({ type: 'boolean', nullable: true })
   status: boolean;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  postingDate: Date;
 
   @ManyToOne(() => Seeker, (seeker) => seeker.jobRequests, {
     onDelete: 'CASCADE',
@@ -44,4 +47,9 @@ export class JobRequest extends BaseEntity {
     nullable: true,
   })
   notificationsJob: NotificationJob[];
+
+  @BeforeInsert()
+  updateTimestamp() {
+    this.postingDate = new Date();
+  }
 }

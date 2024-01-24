@@ -1,12 +1,12 @@
 import {
-  BaseEntity,
+  BaseEntity, BeforeInsert,
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+  PrimaryGeneratedColumn
+} from "typeorm";
 import { JobCategory } from '../job-category/job-category.entity';
 import { Company } from '../company/company.entity';
 import { JobRequest } from '../job-request/job-request.entity';
@@ -56,4 +56,9 @@ export class JobOffer extends BaseEntity {
     onDelete: 'CASCADE',
   })
   jobRequests: JobRequest[];
+
+  @BeforeInsert()
+  updateTimestamp() {
+    this.postingDate = new Date();
+  }
 }

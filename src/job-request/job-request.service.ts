@@ -91,4 +91,15 @@ export class JobRequestService {
       throw new HttpException('Job request not found', HttpStatus.NOT_FOUND);
     }
   }
+
+  async findAllofOneSeeker(id: string): Promise<JobRequest[]> {
+    const jobRequests: JobRequest[] = await JobRequest.find({
+      where: {
+        seeker: { id: id },
+      },
+      relations: ['cv', 'seeker', 'jobOffer'],
+    });
+
+    return jobRequests;
+  }
 }

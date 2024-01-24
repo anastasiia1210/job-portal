@@ -1,10 +1,10 @@
 import {
-  BaseEntity,
+  BaseEntity, BeforeInsert,
   Column,
   Entity,
   ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+  PrimaryGeneratedColumn
+} from "typeorm";
 import { JobRequest } from '../job-request/job-request.entity';
 import { Seeker } from '../seeker/seeker.entity';
 
@@ -17,7 +17,7 @@ export class NotificationJob extends BaseEntity {
   text: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  date: Date;
+  postingDate: Date;
 
   @Column({ type: 'boolean', nullable: true })
   isRead: boolean;
@@ -31,4 +31,9 @@ export class NotificationJob extends BaseEntity {
     onDelete: 'CASCADE',
   })
   seeker: Seeker;
+
+  @BeforeInsert()
+  updateTimestamp() {
+    this.postingDate = new Date();
+  }
 }

@@ -18,7 +18,7 @@ export class JobCategoryService {
   }
 
   async findOne(id: string): Promise<JobCategory | undefined> {
-    return await JobCategory.findOne(id, { relations: ['jobOffers', 'cvs'] });
+    return await JobCategory.findOne(id);
   }
 
   async update(

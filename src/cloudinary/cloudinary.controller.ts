@@ -23,7 +23,7 @@ export class CloudinaryController {
         validators: [
           new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 4 }),
           new FileTypeValidator({
-            fileType: '.(png|jpeg|jpg|pdf|txt|doc|docx)',
+            fileType: '.(png|jpeg|jpg|pdf|txt|doc|docx|webp)',
           }),
         ],
       }),

@@ -31,6 +31,11 @@ export class CVController {
     return await this.cvService.findOne(id);
   }
 
+  @Get('seeker/:id')
+  async findAllofOneSeeker(@Param('id') id: string): Promise<CV[]> {
+    return await this.cvService.findAllofOneSeeker(id);
+  }
+
   @Patch(':id')
   async update(
     @Param('id') id: string,

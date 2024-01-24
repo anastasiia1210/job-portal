@@ -25,12 +25,16 @@ export class CVService {
   }
 
   async findAll(): Promise<CV[]> {
-    const cvs: CV[] = await CV.find();
+    const cvs: CV[] = await CV.find({
+      relations: ['category', 'seeker'],
+    });
     return cvs;
   }
 
   async findOne(id: string): Promise<CV | undefined> {
-    return await CV.findOne(id);
+    return await CV.findOne(id, {
+      relations: ['category', 'seeker'],
+    });
   }
 
   async update(id: string, updateCVDto: UpdateCVDto): Promise<CV> {
@@ -70,5 +74,16 @@ export class CVService {
     } catch (error) {
       throw new HttpException('CV not found', HttpStatus.NOT_FOUND);
     }
+  }
+
+  async findAllofOneSeeker(id: string): Promise<CV[]> {
+    const cvs: CV[] = await CV.find({
+      where: {
+        seeker: { id: id },
+      },
+      relations: ['category', 'seeker'],
+    });
+
+    return cvs;
   }
 }

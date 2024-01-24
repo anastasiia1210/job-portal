@@ -6,6 +6,7 @@ import { JobRequest } from "./job-request.entity";
 import { Company } from "../company/company.entity";
 import { JobCategory } from "../job-category/job-category.entity";
 import { JobOffer } from "../job-offer/job-offer.entity";
+import { CV } from "../cv/cv.entity";
 
 @Controller('job-request')
 export class JobRequestController {
@@ -34,5 +35,10 @@ export class JobRequestController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<JobRequest> {
     return await this.jobRequestService.remove(id);
+  }
+
+  @Get('seeker/:id')
+  async findAllofOneSeeker(@Param('id') id: string): Promise<JobRequest[]> {
+    return await this.jobRequestService.findAllofOneSeeker(id);
   }
 }

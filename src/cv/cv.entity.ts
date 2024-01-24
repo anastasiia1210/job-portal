@@ -1,4 +1,13 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from "typeorm";
 import { JobCategory } from "../job-category/job-category.entity";
 import { Seeker } from "../seeker/seeker.entity";
 import { JobRequest } from "../job-request/job-request.entity";
@@ -41,4 +50,9 @@ export class CV extends BaseEntity {
     onDelete: 'SET NULL',
   })
   jobRequests: JobRequest[];
+
+  @BeforeInsert()
+  updateTimestamp() {
+    this.postingDate = new Date();
+  }
 }

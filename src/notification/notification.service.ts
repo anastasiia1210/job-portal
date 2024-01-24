@@ -88,4 +88,15 @@ export class NotificationJobService {
       throw new HttpException('Notification not found', HttpStatus.NOT_FOUND);
     }
   }
+
+  async findAllofOneSeeker(id: string): Promise<NotificationJob[]> {
+    const notifications: NotificationJob[] = await NotificationJob.find({
+      where: {
+        seeker: { id: id },
+      },
+      relations: ['jobRequest'],
+    });
+
+    return notifications;
+  }
 }

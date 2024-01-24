@@ -6,6 +6,10 @@ import { Company } from './company.entity';
 @Injectable()
 export class CompanyService {
   async create(createCompanyDto: CreateCompanyDto): Promise<Company> {
+    if (!createCompanyDto.image) {
+      createCompanyDto.image =
+        'http://res.cloudinary.com/dywclts4f/image/upload/v1704558070/nglhxrdfdz1liztdgmow.png';
+    }
     const company = Company.create(createCompanyDto);
     return await company.save();
   }
@@ -16,7 +20,7 @@ export class CompanyService {
   }
 
   async findOne(id: string): Promise<Company | undefined> {
-    return await Company.findOne(id, { relations: ['jobOffers'] });
+    return await Company.findOne(id);
   }
 
   async update(
@@ -30,6 +34,10 @@ export class CompanyService {
         'Company with id ${id} not found',
         HttpStatus.BAD_REQUEST,
       );
+    }
+    if (updateCompanyDto.image == '') {
+      updateCompanyDto.image =
+        'http://res.cloudinary.com/dywclts4f/image/upload/v1704558070/nglhxrdfdz1liztdgmow.png';
     }
     Object.assign(company, updateCompanyDto);
     return await Company.save(company);
