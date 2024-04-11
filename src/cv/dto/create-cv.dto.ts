@@ -28,3 +28,4 @@ export class CreateCVDto {
   @IsNotEmpty()
   seekerId: string;
 }
+

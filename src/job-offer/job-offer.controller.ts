@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Put } from "@nestjs/common";
 import { JobOfferService } from './job-offer.service';
 import { CreateJobOfferDto } from './dto/create-job-offer.dto';
 import { UpdateJobOfferDto } from './dto/update-job-offer.dto';
 import { JobOffer } from "./job-offer.entity";
+import { Response } from "express";
 
 @Controller('job-offer')
 export class JobOfferController {
@@ -14,8 +15,14 @@ export class JobOfferController {
   }
 
   @Get()
-  async findAll(): Promise<JobOffer[]> {
-    return await this.jobOfferService.findAll();
+  async findAll(@Res() res: Response): Promise<void> {
+    const offers: JobOffer[] = await this.jobOfferService.findAll();
+    const totalCount = offers.length;
+    res.setHeader(
+      'Content-Range',
+      `offers 0-${offers.length - 1}/${totalCount}`,
+    );
+    res.json(offers);
   }
 
   @Get(':id')
@@ -25,6 +32,11 @@ export class JobOfferController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateJobOfferDto: UpdateJobOfferDto): Promise<JobOffer> {
+    return await this.jobOfferService.update(id, updateJobOfferDto);
+  }
+
+  @Put(':id')
+  async updatePut(@Param('id') id: string, @Body() updateJobOfferDto: UpdateJobOfferDto): Promise<JobOffer> {
     return await this.jobOfferService.update(id, updateJobOfferDto);
   }
 

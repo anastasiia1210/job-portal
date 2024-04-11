@@ -1,26 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
+import { Admin } from "./admin.entity";
 
 @Injectable()
 export class AdminService {
-  create(createAdminDto: CreateAdminDto) {
-    return 'This action adds a new admin';
+
+  async create(createAdminDto: CreateAdminDto): Promise<Admin> {
+    try {
+      const admin = Admin.create(createAdminDto);
+      return await admin.save();
+    } catch (error) {
+      throw new HttpException('Error delete admin', HttpStatus.BAD_REQUEST);
+    }
   }
 
-  findAll() {
-    return `This action returns all admin`;
+  async findAll(): Promise<Admin[]> {
+    const admins: Admin[] = await Admin.find();
+    return admins;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} admin`;
+  async findOne(id: string) {
+    return await Admin.findOne(id);
   }
 
-  update(id: number, updateAdminDto: UpdateAdminDto) {
-    return `This action updates a #${id} admin`;
+  async update(
+    id: string,
+    updatedAdmin: UpdateAdminDto,
+  ): Promise<Admin> {
+    const admin = await Admin.findOne(id);
+
+    if (!admin) {
+      throw new HttpException(
+        'Admin with id ${id} not found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    Object.assign(admin, updatedAdmin);
+    return await Admin.save(admin);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} admin`;
+  async remove(id: string): Promise<Admin> {
+    try {
+      const admin: Admin | undefined = await Admin.findOne(id);
+
+      if (!admin) {
+        throw new HttpException(
+          'Admin with id ${id} not found',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      await admin.remove();
+      return admin;
+    } catch (error) {
+      throw new HttpException('Error delete admin', HttpStatus.BAD_REQUEST);
+    }
   }
 }

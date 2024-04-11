@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
-} from '@nestjs/common';
+  Res, Put
+} from "@nestjs/common";
 import { SeekerService } from './seeker.service';
 import { CreateSeekerDto } from './dto/create-seeker.dto';
 import { UpdateSeekerDto } from './dto/update-seeker.dto';
 import { Seeker } from './seeker.entity';
+import { Response } from 'express';
 
 @Controller('seeker')
 export class SeekerController {
@@ -22,8 +24,14 @@ export class SeekerController {
   }
 
   @Get()
-  async findAll() {
-    return await this.seekerService.findAll();
+  async findAll(@Res() res: Response): Promise<void> {
+    const seekers: Seeker[] = await this.seekerService.findAll();
+    const totalCount = seekers.length; // Assuming you're fetching all seekers
+    res.setHeader(
+      'Content-Range',
+      `seeker 0-${seekers.length - 1}/${totalCount}`,
+    );
+    res.json(seekers);
   }
 
   @Get(':id')
@@ -36,6 +44,14 @@ export class SeekerController {
     @Param('id') id: string,
     @Body() updateSeekerDto: UpdateSeekerDto,
   ): Promise<Seeker> {
+    return await this.seekerService.update(id, updateSeekerDto);
+  }
+
+  @Put(':id')
+  async updatePut(
+    @Param('id') id: string,
+    @Body() updateSeekerDto: UpdateSeekerDto,
+  ): Promise<Seeker | undefined> {
     return await this.seekerService.update(id, updateSeekerDto);
   }
 

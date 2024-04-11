@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SeekerModule } from './seeker/seeker.module';
@@ -15,7 +14,6 @@ import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
-    CloudinaryModule,
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     TypeOrmModule.forRoot(),
     SeekerModule,

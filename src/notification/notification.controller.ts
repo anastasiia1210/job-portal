@@ -11,7 +11,6 @@ import { NotificationJobService } from './notification.service';
 import { CreateNotificationJobDto } from './dto/create-notification.dto';
 import { UpdateNotificationJobDto } from './dto/update-notification.dto';
 import { NotificationJob } from "./notification.entity";
-import { JobRequest } from "../job-request/job-request.entity";
 
 @Controller('notification')
 export class NotificationJobController {

@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
-} from '@nestjs/common';
+  Res, Put
+} from "@nestjs/common";
 import { CVService } from './cv.service';
 import { CreateCVDto } from './dto/create-cv.dto';
 import { UpdateCVDto } from './dto/update-cv.dto';
 import { CV } from './cv.entity';
+import { Response } from 'express';
 
 @Controller('cv')
 export class CVController {
@@ -22,8 +24,11 @@ export class CVController {
   }
 
   @Get()
-  async findAll(): Promise<CV[]> {
-    return await this.cvService.findAll();
+  async findAll(@Res() res: Response): Promise<void> {
+    const cvs: CV[] = await this.cvService.findAll();
+    const totalCount = cvs.length;
+    res.setHeader('Content-Range', `cv 0-${cvs.length - 1}/${totalCount}`);
+    res.json(cvs);
   }
 
   @Get(':id')
@@ -38,6 +43,14 @@ export class CVController {
 
   @Patch(':id')
   async update(
+    @Param('id') id: string,
+    @Body() updateCVDto: UpdateCVDto,
+  ): Promise<CV> {
+    return await this.cvService.update(id, updateCVDto);
+  }
+
+  @Put(':id')
+  async updatePut(
     @Param('id') id: string,
     @Body() updateCVDto: UpdateCVDto,
   ): Promise<CV> {

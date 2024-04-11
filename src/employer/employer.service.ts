@@ -3,6 +3,7 @@ import { CreateEmployerDto } from './dto/create-employer.dto';
 import { UpdateEmployerDto } from './dto/update-employer.dto';
 import { Employer } from './employer.entity';
 import { Company } from '../company/company.entity';
+import { getRepository } from "typeorm";
 
 @Injectable()
 export class EmployerService {
@@ -22,12 +23,16 @@ export class EmployerService {
   }
 
   async findAll(): Promise<Employer[]> {
-    const employers: Employer[] = await Employer.find();
+    const employers: Employer[] = await Employer.find({
+      relations: ['company'],
+    });
     return employers;
   }
 
   async findOne(id: string): Promise<Employer | undefined> {
-    return await Employer.findOne(id);
+    return await Employer.findOne(id, {
+      relations: ['company'],
+    });
   }
 
   async update(
@@ -64,6 +69,15 @@ export class EmployerService {
       return employer;
     } catch (error) {
       throw new HttpException('Error delete employer', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findByEmail(email: string): Promise<Employer | undefined> {
+    const employerRepository = getRepository(Employer);
+    try {
+      return await employerRepository.findOne({ email });
+    } catch (error) {
+      throw new HttpException('Employer not found', HttpStatus.NOT_FOUND);
     }
   }
 }

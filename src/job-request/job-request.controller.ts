@@ -1,12 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Res, Put } from "@nestjs/common";
 import { JobRequestService } from './job-request.service';
 import { CreateJobRequestDto } from './dto/create-job-request.dto';
 import { UpdateJobRequestDto } from './dto/update-job-request.dto';
 import { JobRequest } from "./job-request.entity";
-import { Company } from "../company/company.entity";
-import { JobCategory } from "../job-category/job-category.entity";
-import { JobOffer } from "../job-offer/job-offer.entity";
-import { CV } from "../cv/cv.entity";
+import { Response } from "express";
 
 @Controller('job-request')
 export class JobRequestController {
@@ -18,8 +15,14 @@ export class JobRequestController {
   }
 
   @Get()
-  async findAll(): Promise<JobRequest[]> {
-    return await this.jobRequestService.findAll();
+  async findAll(@Res() res: Response): Promise<void> {
+    const requests: JobRequest[] = await this.jobRequestService.findAll();
+    const totalCount = requests.length;
+    res.setHeader(
+      'Content-Range',
+      `job-request 0-${requests.length - 1}/${totalCount}`,
+    );
+    res.json(requests);
   }
 
   @Get(':id')
@@ -32,6 +35,11 @@ export class JobRequestController {
     return await this.jobRequestService.update(id, updateJobRequestDto);
   }
 
+  @Put(':id')
+  async updatePut(@Param('id') id: string, @Body() updateJobRequestDto: UpdateJobRequestDto): Promise<JobRequest> {
+    return await this.jobRequestService.update(id, updateJobRequestDto);
+  }
+
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<JobRequest> {
     return await this.jobRequestService.remove(id);
@@ -40,5 +48,10 @@ export class JobRequestController {
   @Get('seeker/:id')
   async findAllofOneSeeker(@Param('id') id: string): Promise<JobRequest[]> {
     return await this.jobRequestService.findAllofOneSeeker(id);
+  }
+
+  @Get('job-offer/:id')
+  async findAllofOneJobOffer(@Param('id') id: string): Promise<JobRequest[]> {
+    return await this.jobRequestService.findAllofOneJobOffer(id);
   }
 }

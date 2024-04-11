@@ -2,9 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateJobOfferDto } from './dto/create-job-offer.dto';
 import { UpdateJobOfferDto } from './dto/update-job-offer.dto';
 import { JobOffer } from './job-offer.entity';
-import { Seeker } from '../seeker/seeker.entity';
 import { JobCategory } from '../job-category/job-category.entity';
-import { CV } from '../cv/cv.entity';
 import { Company } from '../company/company.entity';
 
 @Injectable()

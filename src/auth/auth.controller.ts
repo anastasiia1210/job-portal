@@ -1,8 +1,6 @@
 import {
   Body,
   Controller,
-  HttpException,
-  HttpStatus,
   Post,
   Res,
 } from '@nestjs/common';
@@ -12,12 +10,8 @@ import { Admin } from '../admin/admin.entity';
 import { Employer } from '../employer/employer.entity';
 import { getRepository } from 'typeorm';
 import { Response } from 'express';
-import { json } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const jwt = require('jsonwebtoken');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const dotenv = require('dotenv');
 dotenv.config();
 

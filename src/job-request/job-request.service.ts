@@ -102,4 +102,15 @@ export class JobRequestService {
 
     return jobRequests;
   }
+
+  async findAllofOneJobOffer(id: string): Promise<JobRequest[]> {
+    const jobRequests: JobRequest[] = await JobRequest.find({
+      where: {
+        jobOffer: { id: id },
+      },
+      relations: ['cv', 'seeker', 'jobOffer'],
+    });
+
+    return jobRequests;
+  }
 }

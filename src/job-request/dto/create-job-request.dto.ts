@@ -5,9 +5,8 @@ export class CreateJobRequestDto {
   @IsString()
   text: string;
 
-  @IsNotEmpty()
   @IsBoolean()
-  status: boolean;
+  status: boolean | null;
 
   @IsNotEmpty()
   @IsUUID()

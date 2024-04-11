@@ -20,7 +20,9 @@ export class CompanyService {
   }
 
   async findOne(id: string): Promise<Company | undefined> {
-    return await Company.findOne(id);
+    return await Company.findOne(id, {
+      relations: ['jobOffers'],
+    });
   }
 
   async update(

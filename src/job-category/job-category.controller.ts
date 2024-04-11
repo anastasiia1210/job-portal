@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Put } from "@nestjs/common";
 import { JobCategoryService } from './job-category.service';
 import { CreateJobCategoryDto } from './dto/create-job-category.dto';
 import { UpdateJobCategoryDto } from './dto/update-job-category.dto';
 import { JobCategory } from "./job-category.entity";
+import { Response } from "express";
 
 @Controller('job-category')
 export class JobCategoryController {
@@ -14,8 +15,14 @@ export class JobCategoryController {
   }
 
   @Get()
-  async findAll(): Promise<JobCategory[]>{
-    return await this.jobCategoryService.findAll();
+  async findAll(@Res() res: Response): Promise<void> {
+    const categories: JobCategory[] = await this.jobCategoryService.findAll();
+    const totalCount = categories.length;
+    res.setHeader(
+      'Content-Range',
+      `job-category 0-${categories.length - 1}/${totalCount}`,
+    );
+    res.json(categories);
   }
 
   @Get(':id')
@@ -25,6 +32,11 @@ export class JobCategoryController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateJobCategoryDto: UpdateJobCategoryDto): Promise<JobCategory> {
+    return await this.jobCategoryService.update(id, updateJobCategoryDto);
+  }
+
+  @Put(':id')
+  async updatePut(@Param('id') id: string, @Body() updateJobCategoryDto: UpdateJobCategoryDto): Promise<JobCategory> {
     return await this.jobCategoryService.update(id, updateJobCategoryDto);
   }
 
